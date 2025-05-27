@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Author from './Author'
 import Book, { type Book as BookType } from './Book'
 import Button from './Button'
+import BookForm from './BookForm'
 
 let nextId = 11
 export const BOOKS = [
@@ -94,14 +95,26 @@ function App() {
 
   const [books, setBooks] = useState<BookType[]>(BOOKS)
   const [selectedBook, setSelectedBook] = useState<BookType>()
+  const [showForm, setShowForm] = useState(false)
+  const [newBook, setNewBook] = useState<BookType>({
+    id: 0,
+    title: '',
+    author: '',
+    year: 0,
+    image: '',
+  })
+
+  const toggleForm = () => {
+    setShowForm(!showForm)
+  }
 
   const handleAddBook = () => {
-    const randomBook = BOOKS[Math.floor(Math.random() * BOOKS.length)]
-
     setBooks([
       ...books,
-      { ...randomBook, id: nextId++ }
+      { ...newBook, id: nextId++ }
     ])
+    setNewBook({ id: 0, title: '', author: '', year: 0, image: '' })
+    toggleForm()
   }
 
   const handleRemoveBook = (book: BookType) => {
@@ -144,11 +157,21 @@ function App() {
           )}
         </div>
 
-        <div className="text-center py-10">
-          <Button onClick={handleAddBook}>
+        {!showForm && <div className="text-center py-10">
+          <Button onClick={toggleForm}>
             Ajouter un livre
           </Button>
-        </div>
+        </div>}
+
+        {showForm && <div className="mt-4">
+          <pre>{JSON.stringify(newBook, null, 2)}</pre>
+          <BookForm
+            book={newBook}
+            onCancel={toggleForm}
+            onChange={(book: BookType) => setNewBook(book)}
+            onSave={handleAddBook}
+          />
+        </div>}
 
         {/* <Author author={authors[0]} /> */}
         {authors.map(author => <Author author={author} key={author.id} />)}
