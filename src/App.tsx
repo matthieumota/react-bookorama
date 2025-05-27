@@ -1,83 +1,83 @@
 import { useState } from 'react'
 import Author from './Author'
 import Book, { type Book as BookType } from './Book'
+import Button from './Button'
 
-function App() {
-  const book: BookType = {
+let nextId = 11
+export const BOOKS = [
+  {
     id: 1,
     title: 'Le Seigneur des Anneaux',
     author: 'J.R.R. Tolkien',
     year: 1954,
-    image: '/assets/le-seigneur-des-anneaux.jpg'
+    image: '/assets/le-seigneur-des-anneaux.jpg',
+  },
+  {
+    id: 2,
+    title: 'Le Petit Prince',
+    author: 'Antoine de Saint-Exupéry',
+    year: 1943,
+    image: '/assets/le-petit-prince.jpg',
+  },
+  {
+    id: 3,
+    title: '1984',
+    author: 'George Orwell',
+    year: 1949,
+    image: '/assets/1984.jpeg',
+  },
+  {
+    id: 4,
+    title: 'L\'Étranger',
+    author: 'Albert Camus',
+    year: 1942,
+    image: '/assets/l-etranger.jpg',
+  },
+  {
+    id: 5,
+    title: 'Harry Potter à l\'école des sorciers',
+    author: 'J.K. Rowling',
+    year: 1997,
+    image: '/assets/harry-potter-a-l-ecole-des-sorciers.jpg',
+  },
+  {
+    id: 6,
+    title: 'Fahrenheit 451',
+    author: 'Ray Bradbury',
+    year: 1953,
+    image: '/assets/fahrenheit-451.jpg',
+  },
+  {
+    id: 7,
+    title: 'Les Misérables',
+    author: 'Victor Hugo',
+    year: 1862,
+    image: '/assets/les-miserables.jpg',
+  },
+  {
+    id: 8,
+    title: 'Orgueil et Préjugés',
+    author: 'Jane Austen',
+    year: 1813,
+    image: '/assets/orgueil-et-prejuges.jpg',
+  },
+  {
+    id: 9,
+    title: 'Le Comte de Monte-Cristo',
+    author: 'Alexandre Dumas',
+    year: 1844,
+    image: '/assets/le-comte-de-monte-cristo.jpeg',
+  },
+  {
+    id: 10,
+    title: 'La Peste',
+    author: 'Albert Camus',
+    year: 1947,
+    image: '/assets/la-peste.jpg',
   }
+]
 
-  const books: BookType[] = [
-    book,
-    {
-      id: 2,
-      title: 'Le Petit Prince',
-      author: 'Antoine de Saint-Exupéry',
-      year: 1943,
-      image: '/assets/le-petit-prince.jpg',
-    },
-    {
-      id: 3,
-      title: '1984',
-      author: 'George Orwell',
-      year: 1949,
-      image: '/assets/1984.jpeg',
-    },
-    {
-      id: 4,
-      title: 'L\'Étranger',
-      author: 'Albert Camus',
-      year: 1942,
-      image: '/assets/l-etranger.jpg',
-    },
-    {
-      id: 5,
-      title: 'Harry Potter à l\'école des sorciers',
-      author: 'J.K. Rowling',
-      year: 1997,
-      image: '/assets/harry-potter-a-l-ecole-des-sorciers.jpg',
-    },
-    {
-      id: 6,
-      title: 'Fahrenheit 451',
-      author: 'Ray Bradbury',
-      year: 1953,
-      image: '/assets/fahrenheit-451.jpg',
-    },
-    {
-      id: 7,
-      title: 'Les Misérables',
-      author: 'Victor Hugo',
-      year: 1862,
-      image: '/assets/les-miserables.jpg',
-    },
-    {
-      id: 8,
-      title: 'Orgueil et Préjugés',
-      author: 'Jane Austen',
-      year: 1813,
-      image: '/assets/orgueil-et-prejuges.jpg',
-    },
-    {
-      id: 9,
-      title: 'Le Comte de Monte-Cristo',
-      author: 'Alexandre Dumas',
-      year: 1844,
-      image: '/assets/le-comte-de-monte-cristo.jpeg',
-    },
-    {
-      id: 10,
-      title: 'La Peste',
-      author: 'Albert Camus',
-      year: 1947,
-      image: '/assets/la-peste.jpg',
-    }
-  ]
-
+function App() {
   const authors = [
     {
       id: 1,
@@ -91,7 +91,21 @@ function App() {
     }
   ]
 
+  const [books, setBooks] = useState<BookType[]>(BOOKS)
   const [selectedBook, setSelectedBook] = useState<BookType>()
+
+  const handleAddBook = () => {
+    const randomBook = BOOKS[Math.floor(Math.random() * BOOKS.length)]
+
+    setBooks([
+      ...books,
+      { ...randomBook, id: nextId++ }
+    ])
+  }
+
+  const handleRemoveBook = (book: BookType) => {
+    setBooks(books.filter(b => b.id !== book.id))
+  }
 
   return (
     <div className="bg-gray-100 min-h-screen p-4">
@@ -103,6 +117,10 @@ function App() {
             <Book
               book={selectedBook}
               onSelect={() => setSelectedBook(undefined)}
+              onRemove={() => {
+                handleRemoveBook(selectedBook)
+                setSelectedBook(undefined)
+              }}
             />
           </div>
         </div>}
@@ -114,8 +132,15 @@ function App() {
               book={book}
               onSelect={() => setSelectedBook(selectedBook && selectedBook.id === book.id ? undefined : book)}
               active={!selectedBook || selectedBook.id !== book.id}
+              onRemove={() => handleRemoveBook(book)}
             />
           )}
+        </div>
+
+        <div className="text-center py-10">
+          <Button onClick={handleAddBook}>
+            Ajouter un livre
+          </Button>
         </div>
 
         {/* <Author author={authors[0]} /> */}
