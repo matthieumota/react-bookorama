@@ -2,6 +2,7 @@ import { FormEvent, useState } from 'react'
 import Button from './Button'
 import { AUTHORS } from './App'
 import { cn } from './utils'
+import Counter from './Counter'
 
 export type Book = {
     id: number
@@ -171,6 +172,9 @@ function Book({ book, active = true, onSelect, onRemove, onSave }: BookProps) {
                         Modifier
                     </Button>
                 </div>
+
+                <Counter />
+                <Counter initialValue={10} maxValue={20} />
             </div>
         </div>
     )
