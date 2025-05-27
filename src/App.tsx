@@ -1,3 +1,4 @@
+import Author from './Author'
 import Book, { type Book as BookType } from './Book'
 
 function App() {
@@ -76,6 +77,19 @@ function App() {
     }
   ]
 
+  const authors = [
+    {
+      id: 1,
+      name: 'John Doe',
+      birthday: 1924,
+    },
+    {
+      id: 2,
+      name: 'Martin',
+      birthday: 2000,
+    }
+  ]
+
   return (
     <div className="bg-gray-100 min-h-screen p-4">
       <div className="max-w-5xl mx-auto">
@@ -86,6 +100,9 @@ function App() {
             <Book key={book.id} book={book} />
           )}
         </div>
+
+        {/* <Author author={authors[0]} /> */}
+        {authors.map(author => <Author author={author} key={author.id} />)}
       </div>
     </div>
   )
