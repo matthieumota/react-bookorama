@@ -76,6 +76,7 @@ export const BOOKS = [
     image: '/assets/la-peste.jpg',
   }
 ]
+export const AUTHORS = new Set(BOOKS.map(b => b.author))
 
 function App() {
   const authors = [
@@ -107,6 +108,10 @@ function App() {
     setBooks(books.filter(b => b.id !== book.id))
   }
 
+  const handleUpdateBook = (book: BookType) => {
+    setBooks(books.map(b => b.id === book.id ? book : b))
+  }
+
   return (
     <div className="bg-gray-100 min-h-screen p-4">
       <div className="max-w-5xl mx-auto">
@@ -121,6 +126,7 @@ function App() {
                 handleRemoveBook(selectedBook)
                 setSelectedBook(undefined)
               }}
+              onSave={handleUpdateBook}
             />
           </div>
         </div>}
@@ -133,6 +139,7 @@ function App() {
               onSelect={() => setSelectedBook(selectedBook && selectedBook.id === book.id ? undefined : book)}
               active={!selectedBook || selectedBook.id !== book.id}
               onRemove={() => handleRemoveBook(book)}
+              onSave={handleUpdateBook}
             />
           )}
         </div>
