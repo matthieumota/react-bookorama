@@ -12,21 +12,16 @@ export type Book = {
 type BookProps = {
     book: Book
     active?: boolean
+    onSelect: () => void
 }
 
-function Book({ book, active = true }: BookProps) {
+function Book({ book, active = true, onSelect }: BookProps) {
     const [like, setLike] = useState(0)
 
     if (!active) return
 
-    let image
-
-    if (book.image) {
-        image = <img
-            src={book.image}
-            alt={`Couverture de ${book.title}`}
-            className="w-full h-64 object-cover"
-        />
+    const handleSee = () => {
+        onSelect()
     }
 
     return (
@@ -45,7 +40,7 @@ function Book({ book, active = true }: BookProps) {
                 <h2 className="text-md text-gray-600 mb-2">{book.author}</h2>
                 <p className="text-sm text-gray-500 mb-2">Publié en {book.year}</p>
 
-                <Button>Voir</Button>
+                <Button onClick={handleSee}>Voir</Button>
                 <Button id={`setLike(${like} + 1)`} onClick={() => {
                     setLike(like + 1)
                     // attention asynchrone
