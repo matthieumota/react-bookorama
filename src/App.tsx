@@ -4,6 +4,7 @@ import Book, { type Book as BookType } from './Book'
 import Button from './Button'
 import BookForm from './BookForm'
 import Clock from './Clock'
+import axios from 'axios'
 
 let nextId = 11
 export const BOOKS = [
@@ -94,7 +95,9 @@ function App() {
     }
   ]
 
-  const [books, setBooks] = useState<BookType[]>(BOOKS)
+  const [books, setBooks] = useState<BookType[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string>()
   const [selectedBook, setSelectedBook] = useState<BookType>()
   const [showForm, setShowForm] = useState(false)
   const [newBook, setNewBook] = useState<BookType>({
@@ -106,15 +109,22 @@ function App() {
   })
 
   useEffect(() => {
-    console.log('Le composant est monté ou le state a changé')
-  })
+    const fetchBooks = async () => {
+      setLoading(true)
 
-  useEffect(() => {
-    console.log('Le composant est monté')
-  }, [])
+      await new Promise(resolve => setTimeout(resolve, 500))
 
-  useEffect(() => {
-    console.log(`Le livre choisi a changé`, selectedBook)
+      try {
+        const response = await axios.get<BookType[]>('http://localhost:3000/books')
+        setBooks(response.data)
+      } catch (error: any) {
+        setError(error.message)
+      }
+
+      setLoading(false)
+    }
+
+    fetchBooks()
   }, [selectedBook])
 
   const toggleForm = () => {
@@ -157,6 +167,20 @@ function App() {
             />
           </div>
         </div>}
+
+        {loading && (
+          <div className="flex justify-center items-center py-10">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500 border-opacity-50"></div>
+            <span className="ml-4 text-blue-500 font-medium">Chargement des livres...</span>
+          </div>
+        )}
+
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative max-w-xl mx-auto mb-4">
+            <strong className="font-bold">Erreur :</strong>
+            <span className="block sm:inline ml-1">{error}</span>
+          </div>
+        )}
 
         <div className="grid grid-cols-4 gap-4">
           {books.map(book =>
