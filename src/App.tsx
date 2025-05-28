@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Author from './Author'
 import Book, { type Book as BookType } from './Book'
 import Button from './Button'
 import BookForm from './BookForm'
+import Clock from './Clock'
 
 let nextId = 11
 export const BOOKS = [
@@ -104,6 +105,18 @@ function App() {
     image: '',
   })
 
+  useEffect(() => {
+    console.log('Le composant est monté ou le state a changé')
+  })
+
+  useEffect(() => {
+    console.log('Le composant est monté')
+  }, [])
+
+  useEffect(() => {
+    console.log(`Le livre choisi a changé`, selectedBook)
+  }, [selectedBook])
+
   const toggleForm = () => {
     setShowForm(!showForm)
   }
@@ -132,6 +145,7 @@ function App() {
 
         {selectedBook && <div className="flex justify-center mb-4">
           <div className="w-1/3">
+            <Clock />
             <Book
               book={selectedBook}
               onSelect={() => setSelectedBook(undefined)}

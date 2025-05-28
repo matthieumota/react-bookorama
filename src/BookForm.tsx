@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { Book } from './Book'
 import Button from './Button'
 import clsx from 'clsx'
@@ -14,6 +14,12 @@ type BookFormProps = {
 function BookForm({ book, onCancel, onChange, onSave }: BookFormProps) {
     // const [localBook, setLocalBook] = useState(book)
     const [errors, setErrors] = useState<Record<string, string>>({})
+
+    useEffect(() => {
+        const timer = setInterval(() => console.log('tick'), 1000)
+
+        return () => clearInterval(timer)
+    }, [])
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const newBook = { ...book, [event.target.name]: event.target.value }
