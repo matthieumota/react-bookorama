@@ -39,7 +39,7 @@ function Home() {
     const fetchBooks = async () => {
       setLoading(true)
 
-      await new Promise(resolve => setTimeout(resolve, 500))
+      await new Promise(resolve => setTimeout(resolve, 200))
 
       try {
         const response = await axios.get<BookType[]>('http://localhost:3000/books')
