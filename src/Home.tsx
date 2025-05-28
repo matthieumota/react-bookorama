@@ -5,6 +5,7 @@ import Button from './Button'
 import BookForm from './BookForm'
 import Clock from './Clock'
 import axios from 'axios'
+import useCounterStore from './useCounterStore'
 
 let nextId = 11
 
@@ -34,6 +35,8 @@ function Home() {
     year: 0,
     image: '',
   })
+
+  const value = useCounterStore((state) => state.value)
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -82,7 +85,10 @@ function Home() {
   return (
     <div>
       <div>
-        <h1 className="text-3xl font-bold text-center text-blue-500 mb-6">Bookorama</h1>
+        <h1 className="text-3xl font-bold text-center text-blue-500 mb-6">
+          Bookorama
+          (Store Zustand : {value})
+        </h1>
 
         {selectedBook && <div className="flex justify-center mb-4">
           <div className="w-1/3">

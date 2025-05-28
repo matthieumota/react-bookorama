@@ -5,6 +5,7 @@ import { cn } from './utils'
 import Counter from './Counter'
 import { Link } from 'react-router'
 import { UserContext } from './UserContext'
+import useCounterStore from './useCounterStore'
 
 export type Book = {
     id: number
@@ -29,6 +30,7 @@ function Book({ book, active = true, onSelect, onRemove, onSave }: BookProps) {
     const [errors, setErrors] = useState<Record<string, string>>({})
 
     const { user } = useContext(UserContext)
+    const increment = useCounterStore((state) => state.increment)
 
     if (!active) {
         return
@@ -182,6 +184,8 @@ function Book({ book, active = true, onSelect, onRemove, onSave }: BookProps) {
 
                 <Counter />
                 <Counter initialValue={10} maxValue={20} />
+
+                <Button onClick={() => increment()}>Zustand +</Button>
             </div>
         </div>
     )
