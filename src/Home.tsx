@@ -45,7 +45,7 @@ function Home() {
       await new Promise(resolve => setTimeout(resolve, 200))
 
       try {
-        const response = await axios.get<BookType[]>('http://localhost:3000/books')
+        const response = await axios.get<BookType[]>(`${import.meta.env.VITE_API_URI}/books`)
         setBooks(response.data)
       } catch (error: any) {
         setError(error.message)

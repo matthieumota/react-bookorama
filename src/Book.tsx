@@ -1,4 +1,4 @@
-import { FormEvent, useContext, useState } from 'react'
+import { FormEvent, useContext, useEffect, useRef, useState } from 'react'
 import Button from './Button'
 import { AUTHORS } from './App'
 import { cn } from './utils'
@@ -89,7 +89,21 @@ function Book({ book, active = true, onSelect, onRemove, onSave }: BookProps) {
         setEditMode(false)
     }
 
+    const title = useRef<HTMLInputElement>(null)
+
+    useEffect(() => {
+        if (editMode) {
+            title.current?.focus()
+            if (title.current) {
+                title.current.style.backgroundColor = 'red'
+            }
+        }
+    }, [editMode])
+
     if (editMode) {
+        // title.current++
+        // console.log(title.current)
+
         return (
             <div className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200">
                 <div className="p-4">
@@ -103,6 +117,7 @@ function Book({ book, active = true, onSelect, onRemove, onSave }: BookProps) {
                                 value={localBook.title}
                                 name="title"
                                 onChange={handleChange}
+                                ref={title}
                             />
                             {errors.title && <p className="text-red-500">{errors.title}</p>}
                         </div>
