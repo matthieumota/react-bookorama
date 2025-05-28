@@ -1,9 +1,10 @@
-import { FormEvent, useState } from 'react'
+import { FormEvent, useContext, useState } from 'react'
 import Button from './Button'
 import { AUTHORS } from './App'
 import { cn } from './utils'
 import Counter from './Counter'
 import { Link } from 'react-router'
+import { UserContext } from './UserContext'
 
 export type Book = {
     id: number
@@ -26,6 +27,8 @@ function Book({ book, active = true, onSelect, onRemove, onSave }: BookProps) {
     const [editMode, setEditMode] = useState(false)
     const [localBook, setLocalBook] = useState(book)
     const [errors, setErrors] = useState<Record<string, string>>({})
+
+    const { user } = useContext(UserContext)
 
     if (!active) {
         return
@@ -169,9 +172,9 @@ function Book({ book, active = true, onSelect, onRemove, onSave }: BookProps) {
                     <Button title="Supprimer" onClick={handleRemove} className="bg-red-500 hover:bg-red-800">
                         🗑️
                     </Button>
-                    <Button title="Modifier" onClick={toggleEdit}>
+                    {user && <Button title="Modifier" onClick={toggleEdit}>
                         Modifier
-                    </Button>
+                    </Button>}
                     <Link to={`/livre/${book.id}`} className="bg-blue-500 hover:bg-blue-800 text-white py-1.5 px-4 rounded-md duration-300">
                         Visiter
                     </Link>

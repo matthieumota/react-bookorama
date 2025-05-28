@@ -1,5 +1,8 @@
 import { Link, Outlet } from 'react-router'
 import Counter from './Counter'
+import { useContext } from 'react'
+import { UserContext } from './UserContext'
+import Button from './Button'
 
 export const BOOKS = [
   {
@@ -76,6 +79,8 @@ export const BOOKS = [
 export const AUTHORS = new Set(BOOKS.map(b => b.author))
 
 function App() {
+  const { user, login, logout } = useContext(UserContext)
+
   return (
     <div className="bg-gray-100 min-h-screen p-4">
       <div className="max-w-5xl mx-auto">
@@ -85,6 +90,12 @@ function App() {
         </nav>
 
         <Counter />
+
+        {user && <div>
+          <h2>Salut {user.name}</h2>
+          <Button onClick={() => logout()}>Déconnexion</Button>
+        </div>}
+        {!user && <Button onClick={() => login({ name: 'Fiorella' })}>Connexion</Button>}
 
         <Outlet />
       </div>
